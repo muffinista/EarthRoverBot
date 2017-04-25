@@ -13,16 +13,15 @@ require './manager.rb'
 
 ADMIN_USERS = ["muffinista"]
 BOT_NAME = "@#{client.user.screen_name}".freeze
+TIME_BETWEEN_MOVES = 60*20 # auto-move every 20 minutes
 
 
 $mutex = Mutex.new
 $last_tweet_at = Time.now.to_i
-TIME_BETWEEN_MOVES = 60*12 # auto-move every 20 minutes
 @sleep_rate = 20
 
 @manager = Manager.new
-@rover = @manager.rover
-@parser = Parser.new(rover:@rover, manager:@manager)
+@parser = Parser.new(rover:@manager.rover, manager:@manager)
 
 Thread.abort_on_exception = true
 
