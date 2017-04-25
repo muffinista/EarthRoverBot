@@ -13,4 +13,9 @@ class Response < JSONStruct
     return false if self.valid == false || !self.point || !self.point.url
     point.valid?
   end
+
+  def image
+    return nil if ! valid?
+    point.image_path
+  end
 end
