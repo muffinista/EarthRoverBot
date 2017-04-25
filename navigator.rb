@@ -77,13 +77,8 @@ class Navigator
     STDERR.puts r.inspect
     STDERR.puts "============="
 
-    STDERR.puts "unable to move, let's turn"
+    STDERR.puts "unable to move without turning"
     new_dir = pick_direction(point)
-    if new_dir.nil?
-      return nil
-    end
-
-    STDERR.puts "couldn't move, let's turn to #{new_dir}"
     new_dir
   end
 
@@ -188,15 +183,12 @@ class Navigator
     p.move(d)   
   end
 
-  def distance_to_waypoint(p)
-    wp = @waypoints.first
-    return if wp.nil?
-
+  def distance_to_waypoint(p, wp)
     lat1 = p.lat * Math::PI / 180.to_f
     lon1 = p.lon * Math::PI / 180.to_f
     
-    lat2 = wp.first.to_f * Math::PI / 180.to_f
-    lon2 = wp.last.to_f * Math::PI / 180.to_f
+    lat2 = wp.lat.to_f * Math::PI / 180.to_f
+    lon2 = wp.lon.to_f * Math::PI / 180.to_f
 
     r = 6371000 # radius of earth in meters
 
@@ -210,13 +202,18 @@ class Navigator
 
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     distance = r * c
-
-    STDERR.puts "DISTANCE TO WAYPOINT: #{distance} meters"
-    if distance < MIN_WAYPOINT_DISTANCE
-      @waypoints.shift
-    end
   end
 
+  def reached_waypoint?(p, wp)
+    dist = distance_to_waypoint(p, wp)
+    STDERR.puts "DISTANCE TO WAYPOINT: #{dist} meters"
+    if dist.abs < MIN_WAYPOINT_DISTANCE
+      true
+    else
+      false
+    end
+  end
+  
   def destination_bearing(point, wp=@waypoint)
     # http://www.movable-type.co.uk/scripts/latlong.html
     # JavaScript:

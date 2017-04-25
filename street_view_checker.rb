@@ -5,7 +5,7 @@ class StreetViewChecker
   # this is the color of the 'no imagery available' tile
   NO_IMAGERY_COLOR = 'E4E3DF'
 
-  def valid_street_map?(tmpurl)
+  def valid_street_map?(tmpurl, &block)
     #STDERR.puts tmpurl
     
     begin
@@ -16,7 +16,13 @@ class StreetViewChecker
       # crop down to one corner and get the color of the image
       color = `convert #{dest.path} -crop 40x40+0+0  -resize 1x1 txt:`
 
-      return (color !~ /#{NO_IMAGERY_COLOR}/)
+      result = (color !~ /#{NO_IMAGERY_COLOR}/)
+
+      if result == true && block_given?
+        yield(dest)
+      end
+
+      return result
     rescue OpenURI::HTTPError
       false
     ensure
@@ -25,11 +31,5 @@ class StreetViewChecker
     end
 
     false
-  end
-
-
-  def valid_location?(lat, lon)
-    tmpurl = url(lat, lon)
-    return valid_street_map?(tmpurl)
   end
 end

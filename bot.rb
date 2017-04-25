@@ -102,6 +102,8 @@ class Bot
       @current_point = test_point
       r.text = "moved #{test_point.speed} meters bearing #{test_point.bearing}°"
       r.valid = true
+
+      handle_after_move
     else
       r.text = "Sorry, I can't move there"
       r.valid = false
@@ -120,6 +122,8 @@ class Bot
       @current_point = test_point
       r.text = "moved #{test_point.speed} meters bearing #{test_point.bearing}°"
       r.valid = true
+
+      handle_after_move
     else
       r.text = "I'm having some trouble picking a direction, please help!"
       r.valid = false
@@ -144,6 +148,8 @@ class Bot
       @current_point = test_point
       t.text = "turned to face #{@current_point.bearing}°"
       r.valid = true
+
+      handle_after_move
     else
       r.text = "I'm having some trouble picking a direction, please help!"
       r.valid = false
@@ -183,6 +189,8 @@ class Bot
       @current_point = test_point
       r.text = "moved #{test_point.speed} meters bearing #{test_point.bearing}°"
       r.valid = true
+
+      handle_after_move
     else
       r.text = "I'm having some trouble picking a direction, please help!"
       r.valid = false
@@ -198,4 +206,11 @@ class Bot
 
     Response.new(text:output, point: @current_point)
   end 
+
+  def handle_after_move
+    return if current_target.nil?
+    if @nav.reached_waypoint?(point, current_target)
+      @waypoints.shift
+    end
+  end
 end

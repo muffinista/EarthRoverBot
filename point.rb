@@ -1,4 +1,5 @@
 # coding: utf-8
+require 'fileutils'
 require './json_struct.rb'
 require './mapper.rb'
 
@@ -9,6 +10,9 @@ require './mapper.rb'
 # speed
 
 class Point < JSONStruct
+  IMAGE_PATH = "images"
+  IMAGE_PADDING = 8
+  
   class << self
     def default_point
       Point.new(
@@ -64,12 +68,30 @@ class Point < JSONStruct
     mapper.place_from_position(self)
   end
 
+  def filename
+    self.step.to_s.rjust(IMAGE_PADDING, '0')
+  end
+  
+  def image_dir
+    subdirs = filename.chars.each_slice(4).map(&:join).first(2)
+    File.join(IMAGE_PATH, subdirs)
+  end
+  
+  def image_path
+    File.join(image_dir, "#{filename}.jpg")
+  end
+  
   #
   # is this a valid location on google street view?
+  # NOTE: if it is valid, the block here will copy the temp file
+  # we use for testing to display to the user later
   # 
   def valid?
     svc = StreetViewChecker.new
-    svc.valid_street_map?(self.url)
+    svc.valid_street_map?(self.url) { |file|
+      FileUtils.mkdir_p(image_dir)
+      FileUtils.cp(file, image_path)
+    }
   end
 
   #
@@ -87,7 +109,7 @@ class Point < JSONStruct
   end
 
   def move(dist=speed)
-    STDERR.puts "CALC MOVE #{lat} #{lon} #{bearing} #{d}"
+    STDERR.puts "CALC MOVE #{lat} #{lon} #{bearing} #{dist}"
 
     # Formula:	φ2 = asin( sin φ1 ⋅ cos δ + cos φ1 ⋅ sin δ ⋅ cos θ )
     # λ2 = λ1 + atan2( sin θ ⋅ sin δ ⋅ cos φ1, cos δ − sin φ1 ⋅ sin φ2 )
@@ -101,7 +123,7 @@ class Point < JSONStruct
     r = 6378.1 #radius of the Earth
 
     # @todo is this right?
-    d = dist.to_f / 1000
+    d = dist.to_f #/ 1000
 
     lat1 = self.lat * Math::PI / 180.to_f
     lon1 = self.lon * Math::PI / 180.to_f
