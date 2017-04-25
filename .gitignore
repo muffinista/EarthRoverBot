@@ -1,0 +1,6 @@
+*.yml
+*.yaml
+log.json
+data.json
+.env
+images/*.jpg
