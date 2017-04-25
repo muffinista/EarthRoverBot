@@ -17,7 +17,7 @@ BOT_NAME = "@#{client.user.screen_name}".freeze
 
 $mutex = Mutex.new
 $last_tweet_at = Time.now.to_i
-@time_between_moves = 60*12 # auto-move every 20 minutes
+TIME_BETWEEN_MOVES = 60*12 # auto-move every 20 minutes
 @sleep_rate = 20
 
 @manager = Manager.new
@@ -117,7 +117,7 @@ timer_thread = Thread.new {
     STDERR.puts Time.now.to_i
 
     begin     
-      if Time.now.to_i - $last_tweet_at > @time_between_moves
+      if Time.now.to_i - $last_tweet_at > TIME_BETWEEN_MOVES
         $mutex.synchronize {
           $last_tweet_at = Time.now.to_i
 
@@ -125,7 +125,7 @@ timer_thread = Thread.new {
           result = @parser.handle(req)
           @manager.save
 
-          if result.text =~ /Sorry/ || result[:text] =~ /move there/
+          if !result.valid? || result.text =~ /Sorry/ || result[:text] =~ /move there/
           else
             tweet_result(result)
           end
