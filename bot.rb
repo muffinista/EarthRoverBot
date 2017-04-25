@@ -1,5 +1,5 @@
 # coding: utf-8
-require './imager.rb'
+require './mapper.rb'
 require './response.rb'
 require './navigator.rb'
 
@@ -10,9 +10,23 @@ class Bot
 
   def initialize(p=nil, _waypoints=[])
     @current_point = p
-    @imager = Imager.new
+    @mapper = Mapper.new
     @nav = Navigator.new
     @waypoints = _waypoints
+  end
+
+
+  def lat
+    @current_point.lat
+  end
+  def lon
+    @current_point.lon
+  end
+  def bearing
+    @current_point.bearing
+  end
+  def waypoint
+    @current_point.waypoint
   end
 
   def waypoints
@@ -51,21 +65,8 @@ class Bot
     Response.new(text:output, point: @current_point)
   end
 
-  def lat
-    @current_point.lat
-  end
-  def lon
-    @current_point.lon
-  end
-  def bearing
-    @current_point.bearing
-  end
-  def waypoint
-    @current_point.waypoint
-  end
-
   def map(opts=[])
-    output = "https://maps.google.com/?t=k&q=#{@current_point.lat},#{@current_point.lon}"
+    output = @mapper.map_url(@current_point)
     Response.new(text:output, point: @current_point)    
   end
   
@@ -192,7 +193,7 @@ class Bot
 
   def targets(opts=[])   
     output = waypoints.collect { |p|
-      "#{p.lat},#{p.lon} http://maps.google.com/?t=k&q=#{p.lat},#{p.lon}"
+      "#{p.lat},#{p.lon} #{@mapper.map_url(p)}"
     }.join("\n")
 
     Response.new(text:output, point: @current_point)

@@ -1,6 +1,6 @@
 # coding: utf-8
 require './json_struct.rb'
-require './imager.rb'
+require './mapper.rb'
 
 # step
 # lat
@@ -35,16 +35,33 @@ class Point < JSONStruct
     end
   end
 
-  def imager
-    @_imager ||= Imager.new
+  def increment(attrs={})
+    p = Point.new(
+      step: self.step + 1,
+      lat: self.lat,
+      lon: self.lon,
+      bearing: self.bearing,
+      speed: self.speed
+    )
+
+    attrs.each { |k, v|
+      p[k] = v
+    }
+
+    p
+  end
+
+
+  def mapper
+    @_mapper ||= Mapper.new
   end
   
   def url
-    imager.url(self)
+    mapper.url(self)
   end
 
   def pretty_name
-    imager.place_from_position(self)
+    mapper.place_from_position(self)
   end
 
   #
@@ -60,16 +77,6 @@ class Point < JSONStruct
   #
   def current_waypoint
     @step.to_s(36)    
-  end
-
-  def increment
-    Point.new(
-      step: self.step + 1,
-      lat: self.lat,
-      lon: self.lon,
-      bearing: self.bearing,
-      speed: self.speed
-    )
   end
 
   def bearing=(x)

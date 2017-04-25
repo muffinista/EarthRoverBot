@@ -21,16 +21,11 @@ class Navigator
     STDERR.puts "TURN #{opts.inspect}"
     dir = opts.select { |i| i.to_i != 0 }.first.to_i
 
-    p = point.increment
-    p.bearing += dir
-
-    p
+    point.increment(bearing: point.bearing + dir)
   end
 
   def repoint(point, opts = [])
-    p = point.increment
-    p.bearing = destination_bearing(point)
-    p
+    point.increment(bearing: destination_bearing(point))
   end
 
   def face(point, opts = [])
@@ -38,13 +33,8 @@ class Navigator
     STDERR.puts opts.inspect
     dir = opts.first.to_i
 
-    while dir < 0
-      dir = dir + 360
-    end
-
-    p = point.increment
-    p.bearing = dir
-    p
+    dir = Point.normalize_angle(dir)
+    point.increment(bearing: dir)
   end
   
   def left(point, opts = [])
@@ -177,7 +167,7 @@ class Navigator
     opts << DEFAULT_MOVE
     
     d = opts.select { |i| i.to_i > 0 }.first
-#    d = opts.select { |i| i =~ /\A[-+]?\d+\z/  }.first.to_i
+    # d = opts.select { |i| i =~ /\A[-+]?\d+\z/  }.first.to_i
 
     d = DEFAULT_MOVE if d == 0
     d = d.to_i
