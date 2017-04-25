@@ -98,7 +98,7 @@ class Point < JSONStruct
   # get the string we'll use to identify a waypoint in tweets
   #
   def current_waypoint
-    @step.to_s(36)    
+    self.step.to_s(36)    
   end
 
   def bearing=(x)
@@ -109,8 +109,6 @@ class Point < JSONStruct
   end
 
   def move(dist=speed)
-    STDERR.puts "CALC MOVE #{lat} #{lon} #{bearing} #{dist}"
-
     # Formula:	φ2 = asin( sin φ1 ⋅ cos δ + cos φ1 ⋅ sin δ ⋅ cos θ )
     # λ2 = λ1 + atan2( sin θ ⋅ sin δ ⋅ cos φ1, cos δ − sin φ1 ⋅ sin φ2 )
     # where	φ is latitude, λ is longitude, θ is the bearing (in
@@ -152,9 +150,6 @@ class Point < JSONStruct
     #         Math.sin(φ1)*Math.cos(φ2)*Math.cos(λ2-λ1);
     # var brng = Math.atan2(y, x).toDegrees();
     # φ is latitude, λ is longitude,
-
-    #wp = @waypoints.first
-    #STDERR.puts "TARGET: #{wp.inspect}"
 
     lat2 = lat.to_f * Math::PI / 180.to_f
     lon2 = lon.to_f * Math::PI / 180.to_f

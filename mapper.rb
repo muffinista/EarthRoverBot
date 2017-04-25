@@ -16,7 +16,6 @@ class Mapper
 
   def place_from_position(point)
     tmpurl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=#{point.lat},#{point.lon}"
-    puts tmpurl
 
     data = HTTParty.get(tmpurl)
     return nil if ! data["results"]

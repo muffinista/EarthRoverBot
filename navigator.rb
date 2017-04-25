@@ -74,9 +74,6 @@ class Navigator
 
     return max_move if !max_move.nil?
 
-    STDERR.puts r.inspect
-    STDERR.puts "============="
-
     STDERR.puts "unable to move without turning"
     new_dir = pick_direction(point)
     new_dir
@@ -137,7 +134,6 @@ class Navigator
 
       while steps <= max_steps && steps >= -1 * max_steps
         test.bearing += steps
-        STDERR.puts test.inspect
 
         [100, 75, 50, 40, 30, 20, 10, 5].each { |test_speed|
           test.speed = test_speed

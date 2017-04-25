@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 require 'json'
-require 'sequel'
 
 class Parser
   COMMANDS = ["help", "status", "move",
@@ -14,15 +13,13 @@ class Parser
     ["reset", "target", "targets"]
   ).freeze
 
-  def initialize(bot:nil, manager:nil)
-    @bot = bot
+  def initialize(rover:nil, manager:nil)
+    @rover = rover
     @manager = manager
   end
   
   def handle(request)
     tokens = request.tokens
-
-    puts tokens.inspect
     return if tokens.empty?
 
     result = Response.new(
@@ -37,7 +34,7 @@ class Parser
       cmd = tokens.shift.downcase.gsub(/[^a-z]/, "").strip
       if commands.include?(cmd)
         handled = true
-        result = @bot.send cmd.to_sym, tokens
+        result = @rover.send cmd.to_sym, tokens
 
         update(request, result)
       end

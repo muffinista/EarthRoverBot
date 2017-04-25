@@ -1,20 +1,18 @@
-require 'sequel'
-
 class Manager
   LOGFILE = "log.json"
   DATAFILE = "data.json"
 
   def initialize
-    @bot = Bot.new
+    @rover = Rover.new
     load
   end
 
   def current_point
-    @bot.point
+    @rover.point
   end
 
-  def bot
-    @bot
+  def rover
+    @rover
   end
 
   def load(filename="data.json")
@@ -27,14 +25,14 @@ class Manager
   end
 
   def apply(h)
-    @bot.point = Point.new(h["point"])
-    @bot.waypoints = h["waypoints"].collect { |x| Point.new(x) } || []
+    @rover.point = Point.new(h["point"])
+    @rover.waypoints = h["waypoints"].collect { |x| Point.new(x) } || []
   end
 
   def save(filename=DATAFILE)
     data = {
-      "point" => @bot.point.to_h,
-      "waypoints" => @bot.waypoints.collect(&:to_h)
+      "point" => @rover.point.to_h,
+      "waypoints" => @rover.waypoints.collect(&:to_h)
     }
 
     File.write(filename, JSON.dump(data))
@@ -48,8 +46,6 @@ class Manager
     }
 
     output = JSON.dump(output)
-
-    puts output
     
     f = File.open(LOGFILE, "a")
     f.puts output

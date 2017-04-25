@@ -5,7 +5,7 @@ require './navigator.rb'
 
 require 'pry'
 
-class Bot
+class Rover
   POS_FORMAT = "%4.6f"
 
   def initialize(p=nil, _waypoints=[])
@@ -56,9 +56,9 @@ class Bot
       pretty_name,
       "lat: #{POS_FORMAT % lat}",
       "lon: #{POS_FORMAT % lon}",
-      "bearing: #{bearing}°"
+      "bearing: #{bearing}°",
+      @mapper.map_url(@current_point)
     ].compact.join(", ")
-
 
     @current_point = @current_point.increment
 
