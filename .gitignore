@@ -2,5 +2,6 @@
 *.yaml
 log.json
 data.json
+waypoints.json
 .env
 images/*.jpg
