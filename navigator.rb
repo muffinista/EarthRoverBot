@@ -22,7 +22,9 @@ class Navigator
     STDERR.puts "TURN #{opts.inspect}"
     dir = opts.select { |i| i.to_i != 0 }.first.to_i
 
-    point.increment(bearing: point.bearing + dir)
+    p = point.increment(bearing: point.bearing + dir)
+    p.valid?
+    p
   end
 
   def repoint(point, opts = [])
@@ -35,7 +37,9 @@ class Navigator
     dir = opts.first.to_i
 
     dir = Point.normalize_angle(dir)
-    point.increment(bearing: dir)
+    p = point.increment(bearing: dir)
+    p.valid?
+    p
   end
   
   def left(point, opts = [])
@@ -85,7 +89,7 @@ class Navigator
     new_p = retarget_from(p, p.bearing, true)
 
     # start from scratch if a narrow attempt didnt work
-    new_p ||= retarget_from
+    new_p ||= retarget_from(p)
 
     new_p
   end

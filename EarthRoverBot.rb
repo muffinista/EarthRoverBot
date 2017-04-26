@@ -46,7 +46,7 @@ def unfollow_unfollowers
 end
 
 def tweet_result(result, tweet=nil)
-  postfix = if result.point.current_waypoint
+  postfix = if result.point && result.point.current_waypoint
               result.point.current_waypoint
             else
               Random.new.rand(10..99)
