@@ -1,7 +1,8 @@
 class Manager
   LOGFILE = "log.json"
   DATAFILE = "data.json"
-
+  WAYPOINTS = "waypoints.json"
+  
   def initialize
     @rover = Rover.new
     load
@@ -50,6 +51,16 @@ class Manager
     f = File.open(LOGFILE, "a")
     f.puts output
     f.close
-  end
-  
+
+    # update waypoints too
+    if result.point
+      output = result.point.to_h
+      output = JSON.dump(output)
+      
+      f = File.open(WAYPOINTS, "a")
+      f.puts output
+      f.close
+    end
+
+  end 
 end
