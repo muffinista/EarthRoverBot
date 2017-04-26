@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/muffinista/chatterbot.git
-  revision: 3bb486609db432d95b9dfd78f977f5a13886699f
+  revision: c03fd1aa6413b03ea7ebe7239f4a37a2d36ee3b1
   specs:
     chatterbot (2.0.4)
       colorize (>= 0.7.3)
