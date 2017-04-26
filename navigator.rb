@@ -22,7 +22,8 @@ class Navigator
     STDERR.puts "TURN #{opts.inspect}"
     dir = opts.select { |i| i.to_i != 0 }.first.to_i
 
-    p = point.increment(bearing: point.bearing + dir)
+    dir = Point.normalize_angle(point.bearing + dir)
+    p = point.increment(bearing: dir)
     p.valid?
     p
   end
