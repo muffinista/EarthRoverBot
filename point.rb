@@ -73,7 +73,7 @@ class Point < JSONStruct
   end
   
   def image_dir
-    subdirs = filename.chars.each_slice(4).map(&:join).first(2)
+    subdirs = filename.chars.each_slice(3).map(&:join).first(2)
     File.join(IMAGE_PATH, subdirs)
   end
   
