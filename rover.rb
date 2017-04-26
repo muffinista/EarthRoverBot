@@ -60,8 +60,7 @@ class Rover
       @mapper.map_url(@current_point)
     ].compact.join(", ")
 
-    @current_point = @current_point.increment
-
+    #@current_point = @current_point.increment
     Response.new(text:output, point: @current_point)
   end
 

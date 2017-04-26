@@ -29,6 +29,7 @@ class REPL
       if @status
         puts @status
         puts @status.valid?
+        puts @status.image
       end
 
       repl[">> "]

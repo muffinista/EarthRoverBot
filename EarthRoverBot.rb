@@ -25,6 +25,24 @@ $last_tweet_at = Time.now.to_i
 
 Thread.abort_on_exception = true
 
+def unfollow_unfollowers
+  follower_ids = client.follower_ids.to_a
+  following = client.friend_ids.to_a
+
+  diff = following - follower_ids
+  puts diff.inspect
+  puts diff.count
+  client.unfollow(diff)
+
+  follower_ids = client.follower_ids.to_a
+  following = client.friend_ids.to_a
+
+  diff = follower_ids - following
+  puts diff.inspect
+  puts diff.count
+  client.follow(diff)
+end
+
 def tweet_result(result, tweet=nil)
   postfix = if result.point.current_waypoint
               result.point.current_waypoint
