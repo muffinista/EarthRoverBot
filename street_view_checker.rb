@@ -6,8 +6,6 @@ class StreetViewChecker
   NO_IMAGERY_COLOR = 'E4E3DF'
 
   def valid_street_map?(tmpurl, &block)
-    #STDERR.puts tmpurl
-    
     begin
       dest = Tempfile.new('pic')
       dest << open(tmpurl).read
@@ -15,7 +13,6 @@ class StreetViewChecker
       
       # crop down to one corner and get the color of the image
       color = `convert #{dest.path} -crop 40x40+0+0  -resize 1x1 txt:`
-
       result = (color !~ /#{NO_IMAGERY_COLOR}/)
 
       if result == true && block_given?
@@ -23,7 +20,8 @@ class StreetViewChecker
       end
 
       return result
-    rescue OpenURI::HTTPError
+    rescue OpenURI::HTTPError => ex
+      STDERR.puts "oops! #{ex}"
       false
     ensure
       dest && dest.close

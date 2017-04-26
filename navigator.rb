@@ -166,7 +166,8 @@ class Navigator
     # d = opts.select { |i| i =~ /\A[-+]?\d+\z/  }.first.to_i
 
     d = DEFAULT_MOVE if d == 0
-
+    d = d.to_i
+    
     if opts.join(" ") =~ /forward/
       
     elsif opts.join(" ") =~ /back/

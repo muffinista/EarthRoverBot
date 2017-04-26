@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
+require 'dotenv/load'
 require 'chatterbot/dsl'
 
 require './request.rb'
