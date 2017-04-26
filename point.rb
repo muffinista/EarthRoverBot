@@ -119,13 +119,10 @@ class Point < JSONStruct
     #http://stackoverflow.com/questions/7222382/get-lat-long-given-current-point-distance-and-bearing
     
     r = 6378.1 #radius of the Earth
-
-    # @todo is this right?
-    d = dist.to_f #/ 1000
+    d = dist.to_f / 1000
 
     lat1 = self.lat * Math::PI / 180.to_f
     lon1 = self.lon * Math::PI / 180.to_f
-
     
     rad_bearing = self.bearing * Math::PI / 180.to_f
     

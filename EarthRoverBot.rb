@@ -40,7 +40,9 @@ def unfollow_unfollowers
   diff = follower_ids - following
   puts diff.inspect
   puts diff.count
-  client.follow(diff)
+  diff.each { |id|
+    client.follow(id) rescue nil
+  }
 end
 
 def tweet_result(result, tweet=nil)
@@ -84,9 +86,7 @@ def tweet_result(result, tweet=nil)
 end
 
 
-debug_mode
 use_streaming
-verbose
 
 followed do |user|
   follow user
@@ -131,8 +131,6 @@ end
 
 timer_thread = Thread.new {
   while(true) do
-    STDERR.puts Time.now.to_i
-
     begin     
       if Time.now.to_i - $last_tweet_at > TIME_BETWEEN_MOVES
         $mutex.synchronize {
