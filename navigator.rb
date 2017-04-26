@@ -4,7 +4,8 @@ class Navigator
   DEFAULT_MOVE = 400
   MIN_WAYPOINT_DISTANCE = 25
   MAX_MOVE = 1000
-
+  AUTO_SPEEDS = [200, 150, 100, 75, 50, 40, 30, 20, 10, 5]
+  
   attr_accessor :waypoint
   
   def initialize
@@ -83,9 +84,8 @@ class Navigator
   def pick_direction(p)
     new_p = retarget_from(p, p.bearing, true)
 
-    if new_p.nil?
-      new_p = retarget_from
-    end
+    # start from scratch if a narrow attempt didnt work
+    new_p ||= retarget_from
 
     new_p
   end
@@ -98,8 +98,8 @@ class Navigator
     end
 
     STDERR.puts "retarget #{base} #{tight}"
-    angles_tried = []
 
+    # we basically either sweep left or right randomly here
     if rand > 0.5
       offset = 1
       mult = -1
@@ -115,6 +115,7 @@ class Navigator
             { start: 45 * mult, offset: offset, max_steps: 360 }
            ]
 
+    # limit to a smaller arc
     if tight == true
       arcs = arcs.reject { |a|
         a[:max_steps] > 80
@@ -135,7 +136,7 @@ class Navigator
       while steps <= max_steps && steps >= -1 * max_steps
         test.bearing += steps
 
-        [100, 75, 50, 40, 30, 20, 10, 5].each { |test_speed|
+        AUTO_SPEEDS.each { |test_speed|
           test.speed = test_speed
           result = test.move
 
