@@ -1,3 +1,6 @@
+#
+# This class mostly handles loading/persisting data
+#
 class Manager
   LOGFILE = "log.json"
   DATAFILE = "data.json"

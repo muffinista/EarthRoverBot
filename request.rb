@@ -7,7 +7,7 @@ class Request < JSONStruct
     super(args)
     self.created_at ||= Time.now
   end
-  
+
   def tokens
     @_tokens ||= text.downcase.split
   end

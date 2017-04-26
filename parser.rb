@@ -4,13 +4,15 @@
 require 'json'
 
 class Parser
+  # commands anyone can use
   COMMANDS = ["help", "status", "move",
               "turn", "left", "right", "face",
-              "map", "auto", "repoint", "waypoint"].freeze
+              "map", "auto", "repoint"].freeze
 
+  # special commands for admin users
   PRIVILEGED_COMMANDS = (
     COMMANDS +
-    ["reset", "target", "targets"]
+    ["reset", "target", "targets", "waypoint"]
   ).freeze
 
   def initialize(rover:nil, manager:nil)
@@ -44,7 +46,7 @@ class Parser
   end
 
   def help(opts={})
-    {text: "Hi! You can get a list of commands here: http://muffinlabs.com/earth-rover-bot.html"}
+    {text: "Hi! You can get a list of commands here: http://muffinlabs.com/rover/"}
   end
 
   def update(request, result)
