@@ -1,7 +1,7 @@
 require './request.rb'
 require './response.rb'
 require './point.rb'
-require './bot.rb'
+require './rover.rb'
 require './parser.rb'
 require './manager.rb'
 
@@ -39,9 +39,8 @@ end
 
 if __FILE__ == $0
   m = Manager.new
-  b = m.bot
   
-  parser = Parser.new(bot:b, manager:m)
+  parser = Parser.new(rover:m.rover, manager:m)
   r = REPL.new(m, parser)
   r.run
 end
