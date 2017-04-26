@@ -112,7 +112,6 @@ end
 
 home_timeline do |tweet|
   $mutex.synchronize {
-    STDERR.puts tweet.inspect
     next if tweet.text !~ /^#{BOT_NAME}/i
     
     cmd = tweet.text.gsub(/#{BOT_NAME}/i, "")
